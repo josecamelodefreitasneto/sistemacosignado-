@@ -1,0 +1,57 @@
+/* tcc-java */
+import BindingConsultaList from '../../../fc/components/BindingConsultaList';
+import ClienteRubricaUtils from '../../cruds/clienteRubrica/ClienteRubricaUtils';
+import Consulta from '../../../fc/components/Consulta';
+import Sessao from '../../../projeto/Sessao';
+import UCommons from '../../misc/utils/UCommons';
+
+export default class ClienteRubricaConsultaAbstract extends Consulta {
+
+	dados;
+	cliente;
+	rubrica;
+	tipo;
+	valor;
+	excluido;
+	registroBloqueado;
+	init2() {
+		this.nomeEntidade = "ClienteRubrica";
+		this.dados = new BindingConsultaList(
+			"dados",
+			(a, b) => {},
+			body => {
+				let result = body;
+				let array = result.dados;
+				this.dados.addItens(ClienteRubricaUtils.getInstance().fromJsonList(array));
+			},
+			"cliente-rubrica/consulta",
+			() => this.getTo()
+		);
+		this.cliente = this.newFk("Cliente");
+		this.rubrica = this.newFk("Rubrica");
+		this.tipo = this.newFk("Tipo");
+		this.valor = this.newMoney("Valor", 7, false);
+		this.excluido = this.newBoolean("Excluido");
+		this.registroBloqueado = this.newBoolean("Registro Bloqueado");
+	}
+	consultar() {
+		this.dados.clearItens();
+		this.dados.carregar();
+	}
+	getTo() {
+		this.checkInstance();
+		const o = {};
+		o.busca = this.getBusca().get();
+		return o;
+	}
+	getDataSource() {
+		if (UCommons.isEmpty(this.dados)) {
+			return [];
+		} else {
+			return this.dados.getItens();
+		}
+	}
+	checkInstance() {
+		Sessao.checkInstance("ClienteRubricaConsulta", this);
+	}
+}

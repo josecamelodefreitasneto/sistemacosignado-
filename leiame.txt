@@ -1,0 +1,7 @@
+curl 'http://tcc-back:8080/login/efetuar' -H 'access-control-allow-origin: *' -H 'accept: */*' -H 'Referer: http://localhost/' -H 'access-control-allow-credentials: true' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36' -H 'credentials: include' -H 'content-type: application/json; charset=UTF-8' --data-binary '{"login":"admin@admin.com","pass":"123456"}' --compressed | jq .
+
+docker rmi $(docker images | awk '/^<none>/ {print $3}')
+
+
+
+#REACT_APP_STAGE=selfhost npm run build --prefix tcc-front/

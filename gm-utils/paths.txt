@@ -1,0 +1,4 @@
+fc-core-back=/opt/desen/gm/cs2019/gm-frame-constructor/fc-core-back
+front-constructor=/opt/desen/gm/cs2019/gm-frame-constructor/front-constructor
+react-web-antd=/opt/desen/gm/cs2019/reacts/react-web-antd
+react=/opt/desen/gm/cs2019/reacts/react

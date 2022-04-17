@@ -1,0 +1,146 @@
+version: '3'
+
+volumes:
+  postgres_data:
+      driver: local
+services:
+  postgres:
+      image: postgres
+      network_mode: bridge
+      container_name: postgres
+      volumes:
+#        - postgres_data:/var/lib/postgresql/data
+        - "./postgres_data:/var/lib/postgresql/data"
+#        - ./tcc-banco/script000.sql:/docker-entrypoint-initdb.d/2-data.sql
+        - "./tcc-banco:/docker-entrypoint-initdb.d"
+      environment:
+        POSTGRES_DB: tcc
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+      expose:
+      - 5432
+      ports:
+          - 5432:5432
+      restart: unless-stopped
+
+#  pghero:
+#    image: ankane/pghero
+#    container_name: pghero
+#    network_mode: bridge
+#    ports:
+#      - 5151:8080
+#    environment:
+#      DATABASE_URL: postgres://postgres:postgres@postgres:5432
+##    volumes:
+##      - /home/username/pghero/pghero.yml:/app/config/pghero.yml
+#    depends_on:
+#      - postgres
+#    links:
+#      - postgres
+
+  activemq:
+    image: webcenter/activemq
+    #networks: [backing-services]
+    network_mode: bridge    
+    container_name: activemq
+    ports:
+      # mqtt
+      - "1883:1883"
+      # amqp
+      - "5672:5672"
+      # ui
+      - "8161:8161"
+      # stomp
+      - "61613:61613"
+      # ws
+      - "61614:61614"
+      # jms
+      - "61616:61616"
+    volumes: ["activemq-data:/opt/activemq/conf", "activemq-data:/data/activemq", "activemq-data:/var/log/activemq"]
+    environment:
+      ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: "true"
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+#      ACTIVEMQ_WRITE_LOGIN: write
+#      ACTIVEMQ_WRITE_PASSWORD: admin
+#      ACTIVEMQ_READ_PASSWORD: admin
+#      ACTIVEMQ_READ_LOGIN: read
+#      ACTIVEMQ_JMX_LOGIN: jmx
+#      ACTIVEMQ_JMX_PASSWORD: admin
+#      ACTIVEMQ_STATIC_TOPICS: static-topic-1;static-topic-2
+#      ACTIVEMQ_STATIC_QUEUES: static-queue-1;static-queue-2
+#      ACTIVEMQ_ENABLED_SCHEDULER: "true"
+#      ACTIVEMQ_MIN_MEMORY: 512
+#      ACTIVEMQ_MAX_MEMORY: 2048
+    restart: unless-stopped    
+      
+
+      
+  tcc-back:
+      image: tcc/tcc-back:latest
+      network_mode: bridge
+      container_name: tcc-back
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/tcc   
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: postgres
+        SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: public
+#        OWNER: postgres
+        SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+        SPRING_ACTIVEMQ_USER: admin
+        SPRING_ACTIVEMQ_PASSWORD: admin        
+#      expose:
+#        - 8080
+#      ports:
+#        - "8080:8080"
+      restart: unless-stopped
+      depends_on:
+        - postgres
+        - activemq
+      links:
+        - postgres
+        - activemq
+
+  tcc-front:
+      image: tcc/tcc-front:latest
+      network_mode: bridge
+      container_name: tcc-front
+      ports:
+        - 80:80
+      restart: unless-stopped
+      depends_on:
+        - tcc-back
+      links:
+        - tcc-back
+
+
+
+  pgadmin:
+    image: tcc/tcc-pgadmin4
+    network_mode: bridge
+    container_name: tcc-pgadmin
+    restart: always
+    depends_on:
+    - postgres
+    ports:
+    - 5050:80
+    ## you can change pgAdmin default username/password with below environment variables
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin        
+    links:
+      - postgres
+#  tcc-extra:
+#      image: tcc/tcc-extra:latest
+#      network_mode: bridge
+#      container_name: tcc-extra
+#      restart: unless-stopped
+#      depends_on:
+#        - tcc-back
+#      links:
+#        - tcc-back        
+        
+
+volumes:
+  activemq-data: {}
+  postgres-data: {}

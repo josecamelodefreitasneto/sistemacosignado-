@@ -1,0 +1,45 @@
+/* react */
+export default class Color {
+	static amareloCooper = '#FFC905';
+	static amareloCooper2 = '#d6a70e';
+	static pretoCooper = '#000000';
+	static pretoCooperTransparente = 'rgba(0, 0, 0, 0.7)';
+	static brancoCooper = '#ffffff';
+	static brancoCooperTransparente = 'rgba(255, 255, 255, 0.7)';
+	static cinzaEscuro = '#4A4A4A';
+	static cinzaMedio = '#7a7a7a';
+	static cinzaClaro = '#cfcfcf';
+	static cinzaClaro2 = '#dadada';
+	static cinzaClaro3 = '#eaeaea';
+	static cinzaClaro4 = '#f6f6f6';
+	static ocreCooper = '#603c07';
+	static vermelhoCooper = '#ff484a';
+	static white = 'white';
+	static red = 'red';
+	static blue = 'blue';
+	static green = 'green';
+	static lime = 'lime';
+	static black = 'black';
+	static transparent = 'transparent';
+	static transparentCinza = 'rgba(74, 74, 74, 0.7)';
+	static fundoOk = '#009E60';
+	static fundoPendencia = '#ff0707';
+	static fundoAnalise = '#bdb000';
+	static placeholder = 'rgba(0, 0, 0, 0.40)';
+	static ddd = '#ddd';
+	static blackCinza = '#222';
+	static azulCaboFrio = '#23398c';
+	static azulCaboFrio2 = '#494cf4';
+	static info_font = '#31708f';
+	static info_background = '#d9edf7';
+	static info_border = '#bce8f1';
+	static success_font = '#3c763d';
+	static success_background = '#dff0d8';
+	static success_border = '#d6e9c6';
+	static warning_font = '#8a6d3b';
+	static warning_background = '#fcf8e3';
+	static warning_border = '#faebcc';
+	static danger_font = '#a94442';
+	static danger_background = '#f2dede';
+	static danger_border = '#ebccd1';
+}

@@ -1,0 +1,9 @@
+/*
+instalar os certificados que estao na pasta resources
+*/
+
+keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias wildcard -file wildcard.crt
+keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias sso -file sso.crt
+
+keytool -import -file /opt/desen/gm/cs2019/notec/taxas/cooper-gestao-de-taxas/src/main/resources/certificados/sso.crt -storepass changeit -keystore /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/security/cacerts -alias keycloack_sso_crt
+keytool -import -file /opt/desen/gm/cs2019/notec/taxas/cooper-gestao-de-taxas/src/main/resources/certificados/wildcard.crt -storepass changeit -keystore /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/security/cacerts -alias keycloack_wildcard_crt
